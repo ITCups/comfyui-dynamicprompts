@@ -1,3 +1,4 @@
+''' modded by DevilKkw for adding full prompt weight'''
 from __future__ import annotations
 
 import logging
@@ -19,11 +20,12 @@ class DPAbstractSamplerNode(ABC):
                 "text": ("STRING", {"multiline": True, "dynamicPrompts": False}),
                 "seed": ("INT", {"default": 0, "display": "number"}),
                 "autorefresh": (["Yes", "No"], {"default": "No"}),
+                "weight": ("FLOAT", {"default": 1.0000, "display": "number", "min": 1.0000, "max": 2.0000, "step": 0.0001}),
             },
         }
 
     @classmethod
-    def IS_CHANGED(cls, text: str, seed: int, autorefresh: str):
+    def IS_CHANGED(cls, text: str, seed: int, autorefresh: str, weight: float ):
         # Force re-evaluation of the node
         return float("NaN")
 
@@ -36,6 +38,7 @@ class DPAbstractSamplerNode(ABC):
         wildcards_folder = self._find_wildcards_folder()
         self._wildcard_manager = WildcardManager(path=wildcards_folder)
         self._current_prompt = None
+        self._current_weight = 1.0000
 
     def _find_wildcards_folder(self) -> Path | None:
         """
@@ -77,8 +80,16 @@ class DPAbstractSamplerNode(ABC):
         Check if the prompt has changed.
         """
         return self._current_prompt != text
+    """
+    weight mod
+    """    
+    def has_weight_changed(self, weight: float) -> bool:
+        """
+        Check if the weight has changed.
+        """
+        return self._current_weight != weight    
 
-    def get_prompt(self, text: str, seed: int, autorefresh: str) -> tuple[str]:
+    def get_prompt(self, text: str, seed: int, autorefresh: str, weight: float) -> tuple[str]:
         """
         Main entrypoint for this node.
         Using the sampling context, generate a new prompt.
@@ -89,11 +100,21 @@ class DPAbstractSamplerNode(ABC):
 
         if text.strip() == "":
             return ("",)
+        
+        if self.has_weight_changed(weight):
+            self._current_weight = weight
 
         if self.has_prompt_changed(text):
+            
             self._current_prompt = text
-            self._prompts = self.context.sample_prompts(self._current_prompt)
-
+            
+        
+        if self._current_weight > 1.0000:
+            
+            self._current_prompt = ("((" + text + "):" + str(weight) + ")")
+        
+        self._prompts = self.context.sample_prompts(self._current_prompt)
+        
         if self._prompts is None:
             logger.exception("Something went wrong. Prompts is None!")
             return ("",)
