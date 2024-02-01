@@ -1,4 +1,4 @@
-# ComfyUI-DynamicPrompts Custom Nodes
+# ComfyUI-DynamicPrompts Custom Nodes with full weight prompt option
 
 <img src="images/example.png"/>
 
