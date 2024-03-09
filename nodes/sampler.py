@@ -1,4 +1,4 @@
-''' modded by DevilKkw for adding full prompt weight'''
+''' modded by DevilKkw for adding full prompt weight and inline string replace'''
 from __future__ import annotations
 
 import logging
@@ -21,11 +21,14 @@ class DPAbstractSamplerNode(ABC):
                 "seed": ("INT", {"default": 0, "display": "number"}),
                 "autorefresh": (["Yes", "No"], {"default": "No"}),
                 "weight": ("FLOAT", {"default": 1.0000, "display": "number", "min": 1.0000, "max": 2.0000, "step": 0.0001}),
+                "replacer": ([False,True], {"default": False}),
+                "textfind": ("STRING", {"multiline": False}),
+                "textreplace": ("STRING", {"multiline": False}),
             },
         }
 
     @classmethod
-    def IS_CHANGED(cls, text: str, seed: int, autorefresh: str, weight: float ):
+    def IS_CHANGED(cls, text: str, seed: int, autorefresh: str, weight: float, replacer: bool ):
         # Force re-evaluation of the node
         return float("NaN")
 
@@ -39,6 +42,7 @@ class DPAbstractSamplerNode(ABC):
         self._wildcard_manager = WildcardManager(path=wildcards_folder)
         self._current_prompt = None
         self._current_weight = 1.0000
+        self._current_replacer = False
 
     def _find_wildcards_folder(self) -> Path | None:
         """
@@ -54,7 +58,7 @@ class DPAbstractSamplerNode(ABC):
 
         extension_path = (
             Path(folder_names_and_paths["custom_nodes"][0][0])
-            / "comfyui-dynamicprompts"
+            / "comfyui-kkw-dynamicprompts"
         )
         wildcard_path = extension_path / "wildcards"
         wildcard_path.mkdir(parents=True, exist_ok=True)
@@ -75,6 +79,7 @@ class DPAbstractSamplerNode(ABC):
                 logger.exception("No more prompts to generate!")
                 return ""
 
+        
     def has_prompt_changed(self, text: str) -> bool:
         """
         Check if the prompt has changed.
@@ -87,14 +92,16 @@ class DPAbstractSamplerNode(ABC):
         """
         Check if the weight has changed.
         """
-        return self._current_weight != weight    
+        return self._current_weight != weight   
+               
 
-    def get_prompt(self, text: str, seed: int, autorefresh: str, weight: float) -> tuple[str]:
+    def get_prompt(self, text: str, seed: int, autorefresh: str, weight: float, replacer: bool, textfind: str, textreplace: str ) -> tuple[str]:
         """
         Main entrypoint for this node.
         Using the sampling context, generate a new prompt.
         """
-
+        
+            
         if seed > 0:
             self.context.rand.seed(seed)
 
@@ -107,12 +114,22 @@ class DPAbstractSamplerNode(ABC):
         if self.has_prompt_changed(text):
             
             self._current_prompt = text
-            
+       
         
         if self._current_weight > 1.0000:
             
             self._current_prompt = ("((" + text + "):" + str(weight) + ")")
-        
+        """
+        inline replace string function by DevilKkw.
+        """        
+        if replacer:
+            if not textfind:
+                logger.warning("textfind is empty, replacement might not work as expected.")
+            if textreplace:  # Apply replacement only if textreplace has a value
+                self._current_prompt = self._current_prompt.replace(textfind, textreplace)
+            else:
+                logger.warning("textreplace is empty, no replacement performed.")
+              
         self._prompts = self.context.sample_prompts(self._current_prompt)
         
         if self._prompts is None:
