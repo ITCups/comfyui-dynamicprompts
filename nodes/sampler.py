@@ -35,6 +35,8 @@ class DPAbstractSamplerNode(ABC):
         super().__init__(*args, **kwargs)
         wildcards_folder = self._find_wildcards_folder()
         self._wildcard_manager = WildcardManager(path=wildcards_folder)
+        self._wildcard_manager._sort_wildcards = False
+        self._wildcard_manager.clear_cache()
         self._current_prompt = None
 
     def _find_wildcards_folder(self) -> Path | None:
