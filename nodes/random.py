@@ -7,10 +7,4 @@ from .sampler import DPAbstractSamplerNode
 
 
 class DPRandomGenerator(DPAbstractSamplerNode):
-    @property
-    @lru_cache(maxsize=1)
-    def context(self) -> SamplingContext:
-        return SamplingContext(
-            wildcard_manager=self._wildcard_manager,
-            default_sampling_method=SamplingMethod.RANDOM,
-        )
+    pass
