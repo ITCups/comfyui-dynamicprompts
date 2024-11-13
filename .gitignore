@@ -1,2 +1,6 @@
 *.pyc
 __pycache__
+
+# ignore the wildcards folder so i can create a symlink without interference
+# the original folder & contents aren still part of the repo
+wildcards
