@@ -1,4 +1,4 @@
-# ComfyUI-DynamicPrompts Custom Nodes
+# ComfyUI-DynamicPrompts Custom Nodes *- modified by cbaoth*
 
 <img src="images/example.png"/>
 
@@ -80,3 +80,10 @@ Please note, since ComfyUI is inherently stateless, some nodes might have a slig
 2. Currently, the only way to view the generated prompt is through console output. A future release will introduce nodes to display the generate prompt on screen and to write it to a file.
 3. It is not currently possible to chain generators, this functionality will be added in future releases.
 5. The installation script will be  automated in the future for ease of use.
+
+## Updates by cbaoth
+
+* Merged changes done by [do49](https://github.com/do49/comfyui-dynamicprompts)
+  * [Disabled sorting of wildcards](https://github.com/adieyal/comfyui-dynamicprompts/commit/dce7210b36b610858b1f38511354b54d5080ba4d)
+  * [Made changes to allow a single node to switch between C and R modes](https://github.com/adieyal/comfyui-dynamicprompts/commit/455c851f3762f285e7985b04ef2b79d695b1df96)
+    * Meaning [Combinational](https://github.com/adieyal/sd-dynamic-prompts?tab=readme-ov-file#combinatorial-generation) and Random mode
