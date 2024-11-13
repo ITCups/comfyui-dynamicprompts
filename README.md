@@ -81,9 +81,29 @@ Please note, since ComfyUI is inherently stateless, some nodes might have a slig
 3. It is not currently possible to chain generators, this functionality will be added in future releases.
 5. The installation script will be  automated in the future for ease of use.
 
-## Updates by cbaoth
+## Updates 2024-11-13 by cbaoth
 
 * Merged changes done by [do49](https://github.com/do49/comfyui-dynamicprompts)
   * [Disabled sorting of wildcards](https://github.com/adieyal/comfyui-dynamicprompts/commit/dce7210b36b610858b1f38511354b54d5080ba4d)
-  * [Made changes to allow a single node to switch between C and R modes](https://github.com/adieyal/comfyui-dynamicprompts/commit/455c851f3762f285e7985b04ef2b79d695b1df96)
-    * Meaning [Combinational](https://github.com/adieyal/sd-dynamic-prompts?tab=readme-ov-file#combinatorial-generation) and Random mode
+  * [Made changes to allow a single node to switch between C and R modes](https://github.com/adieyal/comfyui-dynamicprompts/commit/455c851f3762f285e7985b04ef2b79d695b1df96), meaning the two modes:
+    * `random` - Generate a single random prompt based on wildcards in the prompt text (default)
+    * `combinational` - Generate all possible prompts based on wildcards in the prompt text (see [sd-dynamic-prompts readme](https://github.com/adieyal/sd-dynamic-prompts?tab=readme-ov-file#combinatorial-generation))
+      * *Note: Be aware that if a lot of wildcards and/or large wildcard-sets are used, the number of possible prompts can grow exponentially and interrupt is usually not possible at this point. Even though only a single prompt is returned at a time (but more invocation + seed), all possible combinations are (most likely) prepared in memory ahead of time.*
+* Added new `DPRandomGeneratorAdvanced` node
+  * Renamed `mode` input (see feature above) to `sampling_mode` for clarification and distinction
+  * Added new `refresh_mode` input with two options:
+    * `always` - Always trigger/re-evaluate the node by resetting the `IS_CHANGED` state (original behavior)
+      * This must be enabled in case `combinational` mode is used to generate all possible prompts using the same seed
+    * `on_value_change` - Only trigger/re-evaluate the node when any input value (text, seed, etc.) has changes (new default behavior)
+      * This is likely the preferred behavior for most use-cases, including `combinational` mode in case the same prompt should be reproduced multiple times
+  * Added new `console_output` input with two options:
+    * `off` - Do not print the generated prompt to the console (new default behavior)
+      * I often times modify the prompts afterwards and use nodes to display the final prompt and save it in the metadata
+    * `final_prompt` - Print the generated prompt to the console (original behavior)
+    * `debug` - Print the generated prompt and additional information to the console (only IS_CHANGED hash for now)
+* Updated the original `DPRandomGenerator` node to use the new `DPRandomGeneratorAdvanced` node with my preferred default settings (fixed values, both inputs are gone to safe space)
+  * `sampling_mode` set to `random`
+  * `refresh_mode` set to `on_value_change`
+  * `console_output` set to `off`
+
+<img src="./images/advanced_node.png"/>
