@@ -1,4 +1,41 @@
-# ComfyUI-DynamicPrompts Custom Nodes
+# ComfyUI-DynamicPrompts with Batch Functionality
+
+
+Original text down below.
+
+Quick extension to the original that lets you generate batches of either random or combinatorial prompts.
+
+<img src="images/batch1.png"/>
+<img src="images/batch2.png"/>
+
+
+### Manual installation
+
+Follow the steps below to install the ComfyUI-DynamicPrompts Library. These commands assume the your current working directory is the ComfyUI root directory.
+
+1. Clone the repository:
+   ```
+   git clone https://github.com/Psynian/comfyui-dynamicprompts-batch custom_nodes/comfyui-dynamicprompts-batch
+   ```
+2. Install the required Python packages:
+   ```
+   python -m pip install -r custom_nodes/comfyui-dynamicprompts/requirements.txt
+   ```
+3. Run install.py:
+   ```
+   python custom_nodes/comfyui-dynamicprompts/install.py
+   ```
+4. `mkdir custom_nodes/dynamicprompts-batch/wildcards`
+5. (Optional) download a wildcard collection and copy it into this new wildcards folder.
+6. Restart your ComfyUI.
+7. Example workflows can be found in `custom_nodes/dynamicprompts-batch/example_workflows`.
+
+
+
+
+
+
+# ORIGINAL README FROM ORIGINAL CUSTOM NODES
 
 <img src="images/example.png"/>
 
@@ -22,34 +59,6 @@ Nodes can be found in the Dynamic Prompts menu:
 * [CHANGELOG](./CHANGELOG.md)
 * [Stable Diffusion SDXL Wildcards and ComfyUI](https://ericri.medium.com/stable-diffusion-sdxl-wildcards-and-comfyui-e8483e00e1c)
 
-## Installation
-
-### Using ComfyUI-Manager
-1. Install [ComfyUI-Manager](https://github.com/ltdrdata/ComfyUI-Manager) if it isn't already.
-2. Press Install Custom Nodes from the ComfyUI-Manager menu
-3. Search for dynamicprompts
-4. Click install
-
-### Manual installation
-
-Follow the steps below to install the ComfyUI-DynamicPrompts Library. These commands assume the your current working directory is the ComfyUI root directory.
-
-1. Clone the repository:
-   ```
-   git clone https://github.com/adieyal/comfyui-dynamicprompts custom_nodes/comfyui-dynamicprompts
-   ```
-2. Install the required Python packages:
-   ```
-   python -m pip install -r custom_nodes/comfyui-dynamicprompts/requirements.txt
-   ```
-3. Run install.py:
-   ```
-   python custom_nodes/comfyui-dynamicprompts/install.py
-   ```
-4. `mkdir custom_nodes/comfyui-dynamicprompts/wildcards`
-5. (Optional) download a wildcard collection and copy it into this new wildcards folder.
-6. Restart your ComfyUI.
-7. Example workflows can be found in `custom_nodes/comfyui-dynamicprompts/example_workflows`.
 
 ## Wildcards
 The extension looks for wildcard files in `custom_nodes/comfyui-dynamicprompts/wildcards`. It supports wildcard files in `.txt`, .`json` and .`yaml` ([example format](https://github.com/adieyal/sd-dynamic-prompts/blob/main/collections/publicprompts.yaml)).
