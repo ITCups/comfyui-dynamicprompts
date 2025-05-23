@@ -81,7 +81,13 @@ Please note, since ComfyUI is inherently stateless, some nodes might have a slig
 3. It is not currently possible to chain generators, this functionality will be added in future releases.
 5. The installation script will be  automated in the future for ease of use.
 
-## Updates 2024-11-13 by cbaoth
+## Updates by cbaoth 2024-11-13
+
+Since the [original repository](https://github.com/adieyal/comfyui-dynamicprompts) is presumably not actively maintained at the moment, I decided to fork the repo and make some fixes and some custom changes as well. The changes are based on my personal preferences and use-cases, but they may be useful for others as well.
+
+Shoutout to [adieyal](https://github.com/adieyal) for providing this great library in the first place!
+
+This should be a more or less comprehensive list of changes I made:
 
 * Merged changes done by [do49](https://github.com/do49/comfyui-dynamicprompts)
   * [Disabled sorting of wildcards](https://github.com/adieyal/comfyui-dynamicprompts/commit/dce7210b36b610858b1f38511354b54d5080ba4d)
