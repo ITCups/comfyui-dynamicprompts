@@ -76,7 +76,7 @@ class DPAbstractSamplerNodeAdvanced(ABC):
 
         extension_path = (
             Path(folder_names_and_paths["custom_nodes"][0][0])
-            / "comfyui-dynamicprompts"
+            / "comfyui-dynamicprompts-batch"
         )
         wildcard_path = extension_path / "wildcards"
         wildcard_path.mkdir(parents=True, exist_ok=True)
